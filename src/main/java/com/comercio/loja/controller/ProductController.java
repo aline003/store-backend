@@ -1,36 +1,34 @@
 package com.comercio.loja.controller;
-
-import com.comercio.loja.product.Product;
-import com.comercio.loja.product.ProductRepository;
+import com.comercio.loja.service.ProductService;
 import com.comercio.loja.product.ProductRequestDTO;
 import com.comercio.loja.product.ProductResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("product")
 public class ProductController {
 
     @Autowired
-    private ProductRepository repository;
+    private ProductService productService;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
-    public void saveProduct(@RequestBody ProductRequestDTO data){
-        Product productData = new Product(data);
-        repository.save(productData);
+    public void saveProduct(@RequestBody ProductRequestDTO data) {
+        productService.saveProduct(data);
     }
 
-
-        @GetMapping
-    public List<ProductResponseDTO> getAll(){
-        List<ProductResponseDTO> productList = repository.findAll().stream().map(ProductResponseDTO :: new).collect(Collectors.toList());
-        return productList;
+    @GetMapping
+    public List<ProductResponseDTO> getAll() {
+        return productService.getAll();
     }
 
+    @DeleteMapping("(/product/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 

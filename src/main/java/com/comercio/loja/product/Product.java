@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Table( name = "product")
 @Entity (name = "product")
 @Getter
@@ -21,10 +23,23 @@ public class Product {
     private Double price;
     private String image;
 
-    public Product(ProductRequestDTO data){
+    public Product(ProductRequestDTO data) {
         this.name = data.name();
         this.price = data.price();
         this.image = data.image();
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
